@@ -5,71 +5,46 @@
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>Van Probleem naar Impact Canvas</title>
 
-<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+<link href="https://fonts.googleapis.com/css2?family=Roboto:wght@300;400;500;700&display=swap" rel="stylesheet">
 
 <style>
 
 :root{
+    --fontys-purple:#663399;
+    --fontys-purple-dark:#4B2472;
+    --fontys-purple-light:#EFE8F5;
 
-    --bg-gradient:
-    linear-gradient(
-        135deg,
-        #6C63FF,
-        #8648FF,
-        #32CFFF
-    );
-
-    --card-bg:rgba(255,255,255,.15);
-
-    --field-bg:white;
-
-    --field-text:#333;
-
-    --main-text:white;
-
-    --details-bg:white;
-
-    --details-text:#333;
-
-    --reflection-bg:#FFF6CC;
-
-    --reflection-text:#333;
-
-    --status-bg:#22c55e;
-
-    --accent:#6C63FF;
-
-    --danger:#ff4d6d;
+    --bg:#F4F3F5;
+    --card-bg:#FFFFFF;
+    --field-bg:#FFFFFF;
+    --field-text:#26242A;
+    --main-text:#26242A;
+    --details-bg:#F7F5F8;
+    --details-text:#26242A;
+    --reflection-bg:#F0EAF4;
+    --reflection-text:#26242A;
+    --status-bg:#663399;
+    --accent:#663399;
+    --danger:#B42318;
+    --border:#DDD8E2;
+    --muted:#68636D;
 }
 
 body.dark{
-
-    --bg-gradient:
-    linear-gradient(
-        135deg,
-        #0f172a,
-        #1e293b,
-        #111827
-    );
-
-    --card-bg:rgba(30,41,59,.90);
-
-    --field-bg:#111827;
-
-    --field-text:#f1f5f9;
-
-    --main-text:#f8fafc;
-
-    --details-bg:#1f2937;
-
-    --details-text:#f8fafc;
-
-    --reflection-bg:#2d2c16;
-
-    --reflection-text:#fff7ae;
-
-    --status-bg:#0284c7;
-
+    --bg:#17141B;
+    --card-bg:#231E29;
+    --field-bg:#17141B;
+    --field-text:#F8F6FA;
+    --main-text:#F8F6FA;
+    --details-bg:#2C2633;
+    --details-text:#F8F6FA;
+    --reflection-bg:#33263C;
+    --reflection-text:#F8F6FA;
+    --status-bg:#663399;
+    --accent:#C9ACE2;
+    --danger:#D45C52;
+    --border:#453B4C;
+    --muted:#C7C0CC;
 }
 
 *{
@@ -79,12 +54,16 @@ body.dark{
 }
 
 html{
-    color-scheme:light dark;
+    color-scheme:light;
+}
+
+body.dark{
+    color-scheme:dark;
 }
 
 body{
-    font-family:'Inter',sans-serif;
-    background:var(--bg-gradient);
+    font-family:'Roboto',Arial,sans-serif;
+    background:var(--bg);
     color:var(--main-text);
     min-height:100vh;
     padding:30px;
@@ -96,112 +75,133 @@ body{
 }
 
 .header{
-    text-align:center;
-    margin-bottom:30px;
+    text-align:left;
+    margin-bottom:24px;
+    padding:32px;
+    border-radius:0;
+    border-left:8px solid var(--fontys-purple);
+    background:var(--card-bg);
+    box-shadow:0 2px 12px rgba(38,36,42,.08);
 }
 
 .header h1{
-    font-size:clamp(2rem,5vw,3.5rem);
+    font-size:clamp(2rem,4vw,3.25rem);
     margin-bottom:10px;
+    color:var(--accent);
+    font-weight:700;
 }
 
 .header p{
     max-width:900px;
-    margin:auto;
     line-height:1.7;
+    color:var(--muted);
 }
 
 #saveStatus{
     background:var(--status-bg);
-    padding:12px;
-    border-radius:14px;
+    color:white;
+    padding:12px 16px;
+    border-radius:4px;
     margin-bottom:20px;
-    text-align:center;
+    text-align:left;
     font-weight:700;
 }
 
 .actions{
-    text-align:center;
-    margin-bottom:15px;
+    display:flex;
+    flex-wrap:wrap;
+    gap:8px;
+    margin-bottom:12px;
 }
 
 .btn{
-    border:none;
-    padding:12px 18px;
-    border-radius:14px;
-    margin:5px;
+    border:1px solid var(--fontys-purple);
+    padding:11px 16px;
+    border-radius:4px;
     cursor:pointer;
     font-weight:700;
-    background:white;
+    background:var(--card-bg);
     color:var(--accent);
+    transition:background .15s ease, color .15s ease, transform .15s ease;
 }
 
 .btn:hover{
-    transform:translateY(-2px);
+    background:var(--fontys-purple);
+    color:white;
+    transform:translateY(-1px);
+}
+
+.btn:focus-visible,
+textarea:focus-visible,
+select:focus-visible,
+summary:focus-visible{
+    outline:3px solid #C9ACE2;
+    outline-offset:2px;
 }
 
 .delete{
     background:var(--danger);
+    border-color:var(--danger);
     color:white;
 }
 
+.delete:hover{
+    background:#8F1D16;
+}
+
 .helper-text{
-    text-align:center;
-    opacity:.95;
-    margin-bottom:25px;
+    text-align:left;
+    color:var(--muted);
+    margin-bottom:24px;
     line-height:1.6;
 }
 
-.card{
+.card,
+.milestone{
     background:var(--card-bg);
-    backdrop-filter:blur(16px);
-    border-radius:24px;
-    padding:25px;
-    margin-bottom:25px;
-    border:1px solid rgba(255,255,255,.15);
+    border-radius:4px;
+    padding:24px;
+    margin-bottom:24px;
+    border:1px solid var(--border);
+    box-shadow:0 2px 10px rgba(38,36,42,.06);
 }
 
 .section-title{
     font-size:1.5rem;
-    font-weight:800;
+    font-weight:700;
     margin-bottom:20px;
+    color:var(--accent);
 }
 
 .grid{
     display:grid;
     grid-template-columns:repeat(auto-fit,minmax(280px,1fr));
-    gap:20px;
+    gap:16px;
 }
 
 .field{
     background:var(--field-bg);
     color:var(--field-text);
-    border-radius:18px;
-    padding:18px;
+    border-radius:4px;
+    padding:16px;
+    border:1px solid var(--border);
 }
 
 label{
     display:block;
-    margin-bottom:10px;
+    margin-bottom:8px;
     font-weight:700;
     color:var(--accent);
 }
 
 textarea,
 select{
-
     width:100%;
-
-    padding:12px;
-
-    border-radius:12px;
-
-    border:1px solid rgba(0,0,0,.1);
-
+    padding:10px 12px;
+    border-radius:4px;
+    border:1px solid var(--border);
     background:var(--field-bg);
-
     color:var(--field-text);
-
     font-family:inherit;
 }
 
@@ -210,28 +210,35 @@ textarea{
     resize:vertical;
 }
 
+textarea:hover,
+select:hover,
+textarea:focus,
+select:focus{
+    border-color:var(--fontys-purple);
+}
+
 .milestone{
-    background:var(--card-bg);
-    border-radius:24px;
-    padding:25px;
-    margin-bottom:25px;
+    border-left:6px solid var(--fontys-purple);
 }
 
 .milestone h3{
     margin-bottom:20px;
+    color:var(--accent);
 }
 
 details{
     background:var(--details-bg);
     color:var(--details-text);
-    border-radius:14px;
-    padding:15px;
-    margin-top:15px;
+    border-radius:4px;
+    padding:14px;
+    margin-top:12px;
+    border:1px solid var(--border);
 }
 
 summary{
     cursor:pointer;
     font-weight:700;
+    color:var(--accent);
 }
 
 details h4{
@@ -245,44 +252,67 @@ details ul{
 }
 
 .reflection{
-    margin-top:15px;
+    margin-top:12px;
     background:var(--reflection-bg);
     color:var(--reflection-text);
-    padding:15px;
-    border-radius:14px;
+    padding:14px;
+    border-radius:4px;
     line-height:1.7;
+    border-left:4px solid var(--accent);
 }
 
 footer{
     text-align:center;
     margin-top:40px;
-    opacity:.9;
+    color:var(--muted);
 }
 
 @media(max-width:768px){
-
     body{
         padding:15px;
     }
 
+    .header,
+    .card,
+    .milestone{
+        padding:18px;
+    }
+
+    .actions{
+        flex-direction:column;
+    }
+
+    .btn{
+        width:100%;
+        margin:0;
+    }
 }
 
 @media print{
-
     body{
         background:white;
-        color:black;
+        color:#26242A;
+        padding:0;
+    }
+
+    .header,
+    .card,
+    .milestone,
+    details,
+    .field,
+    .reflection{
+        box-shadow:none;
+        background:white;
+        color:#26242A;
     }
 
     .btn,
-    #saveStatus{
-        display:none;
-    }
-
+    #saveStatus,
+    .actions,
+    .helper-text,
     details{
         display:none;
     }
-
 }
 
 </style>
@@ -298,7 +328,7 @@ footer{
 
 <div class="header">
 
-<h1>🚀 Van Probleem naar Impact Canvas</h1>
+<h1>Van Probleem naar Impact Canvas</h1>
 
 <p>
 Breng jouw afstudeeronderzoek in beeld als een veranderverhaal.
@@ -346,7 +376,7 @@ onchange="importJSON(event)">
 <div class="card">
 
 <div class="section-title">
-🚨 Mijn onderzoek
+Mijn onderzoek
 </div>
 
 <div class="grid">
@@ -357,7 +387,7 @@ onchange="importJSON(event)">
 </div>
 
 <div class="field">
-<label>🎭 Mijn professionele rol</label>
+<label>Mijn professionele rol</label>
 
 <select data-save>
 <option>Onderzoeker</option>
@@ -370,12 +400,12 @@ onchange="importJSON(event)">
 </div>
 
 <div class="field">
-<label>🚀 Gewenste impact</label>
+<label>Gewenste impact</label>
 <textarea data-save></textarea>
 </div>
 
 <div class="field">
-<label>🌍 Toekomstbeeld</label>
+<label>Toekomstbeeld</label>
 <textarea data-save></textarea>
 </div>
 
@@ -386,7 +416,7 @@ onchange="importJSON(event)">
 <div id="milestones"></div>
 
 <footer>
-Van probleem ➜ inzicht ➜ onderzoek ➜ verandering ✨
+Van probleem ➜ inzicht ➜ onderzoek ➜ verandering
 </footer>
 
 </div>
@@ -396,17 +426,17 @@ Van probleem ➜ inzicht ➜ onderzoek ➜ verandering ✨
 const milestones = [
 
 {
-title:"🔍 Probleemverkenning",
+title:"Probleemverkenning",
 reflection:"Wat gebeurt er als niemand dit probleem oplost?",
 examples:`
-<h4>📝 Wat gebeurt er?</h4>
+<h4>Wat gebeurt er?</h4>
 <ul>
 <li>Werkprocessen observeren</li>
 <li>Knelpunten inventariseren</li>
 <li>Bestaande documenten bekijken</li>
 </ul>
 
-<h4>👥 Wie betrek je?</h4>
+<h4>Wie betrek je?</h4>
 <ul>
 <li>Professionals</li>
 <li>Cliënten</li>
@@ -417,7 +447,7 @@ sample:"Verpleegkundigen registreren informatie in meerdere systemen waardoor ti
 },
 
 {
-title:"🎯 Onderzoeksvraag formuleren",
+title:"Onderzoeksvraag formuleren",
 reflection:"Welke vraag moet je beantwoorden om verbetering mogelijk te maken?",
 examples:`
 <ul>
@@ -430,7 +460,7 @@ sample:"Hoe kunnen administratieve lasten voor verpleegkundigen worden verminder
 },
 
 {
-title:"👥 Stakeholders verkennen",
+title:"Stakeholders verkennen",
 reflection:"Wie heeft de meeste invloed op het succes van jouw onderzoek?",
 examples:`
 <ul>
@@ -444,7 +474,7 @@ sample:"De teamleider beslist over invoering, verpleegkundigen gebruiken de oplo
 },
 
 {
-title:"📊 Data verzamelen",
+title:"Data verzamelen",
 reflection:"Welke informatie zou jouw huidige aannames kunnen tegenspreken?",
 examples:`
 <ul>
@@ -458,7 +488,7 @@ sample:"Interviews tonen aan dat dubbele registratie gemiddeld 25 minuten kost."
 },
 
 {
-title:"🧠 Analyse en inzichten",
+title:"Analyse en inzichten",
 reflection:"Welk inzicht heeft jou het meest verrast?",
 examples:`
 <ul>
@@ -471,7 +501,7 @@ sample:"Het probleem zit vooral in werkafspraken en minder in de software."
 },
 
 {
-title:"💡 Advies of oplossing ontwikkelen",
+title:"Advies of oplossing ontwikkelen",
 reflection:"Welk onderdeel van jouw advies heeft de grootste impact?",
 examples:`
 <ul>
@@ -484,7 +514,7 @@ sample:"Een gestandaardiseerd intakeformulier voorkomt dubbele registratie."
 },
 
 {
-title:"🚀 Afronding en impact",
+title:"Afronding en impact",
 reflection:"Hoe ziet een werkdag eruit nadat jouw aanbevelingen zijn ingevoerd?",
 examples:`
 <ul>
@@ -511,39 +541,39 @@ container.innerHTML += `
 <div class="grid">
 
 <div class="field">
-<label>📝 Wat gebeurt er in deze fase?</label>
+<label>Wat gebeurt er in deze fase?</label>
 <textarea data-save></textarea>
 </div>
 
 <div class="field">
-<label>👥 Wie moet je spreken, betrekken of informeren?</label>
+<label>Wie moet je spreken, betrekken of informeren?</label>
 <textarea data-save></textarea>
 </div>
 
 <div class="field">
-<label>💬 Waarover ga je met hen in gesprek?</label>
+<label>Waarover ga je met hen in gesprek?</label>
 <textarea data-save></textarea>
 </div>
 
 <div class="field">
-<label>✅ Wat levert deze fase op?</label>
+<label>Wat levert deze fase op?</label>
 <textarea data-save></textarea>
 </div>
 
 </div>
 
 <details>
-<summary>💡 Inspiratie en voorbeelden</summary>
+<summary>Inspiratie en voorbeelden</summary>
 ${m.examples}
 </details>
 
 <details>
-<summary>🌟 Uitgewerkt voorbeeld</summary>
+<summary>Uitgewerkt voorbeeld</summary>
 <p>${m.sample}</p>
 </details>
 
 <div class="reflection">
-<strong>🧠 Reflectievraag</strong><br>
+<strong>Reflectievraag</strong><br>
 ${m.reflection}
 </div>
 
@@ -562,9 +592,7 @@ const saveData = {};
 document
 .querySelectorAll("[data-save]")
 .forEach((field,index)=>{
-
 saveData[index]=field.value;
-
 });
 
 localStorage.setItem(
@@ -581,10 +609,8 @@ status.innerHTML =
 clearTimeout(statusTimer);
 
 statusTimer = setTimeout(()=>{
-
 status.innerHTML =
 "✅ Je werk wordt automatisch bewaard";
-
 },1500);
 
 }
@@ -604,14 +630,9 @@ JSON.parse(stored);
 document
 .querySelectorAll("[data-save]")
 .forEach((field,index)=>{
-
 if(saveData[index] !== undefined){
-
-field.value =
-saveData[index];
-
+field.value = saveData[index];
 }
-
 });
 
 }
@@ -623,73 +644,46 @@ const saveData={};
 document
 .querySelectorAll("[data-save]")
 .forEach((field,index)=>{
-
 saveData[index]=field.value;
-
 });
 
 const blob = new Blob(
-[
-JSON.stringify(saveData,null,2)
-],
-{
-type:"application/json"
-}
+[JSON.stringify(saveData,null,2)],
+{type:"application/json"}
 );
 
-const a =
-document.createElement("a");
-
-a.href =
-URL.createObjectURL(blob);
-
-a.download =
-"mijn-afstudeeronderzoek.json";
-
+const a = document.createElement("a");
+a.href = URL.createObjectURL(blob);
+a.download = "mijn-afstudeeronderzoek.json";
 a.click();
 
 setTimeout(()=>{
-
 alert(
 "✅ Je hebt een kopie van je werk opgeslagen.\n\nGebruik dit bestand als je later op een andere computer verder wilt werken."
 );
-
 },200);
 
 }
 
 function importJSON(event){
 
-const file =
-event.target.files[0];
-
+const file = event.target.files[0];
 if(!file) return;
 
-const reader =
-new FileReader();
+const reader = new FileReader();
 
-reader.onload =
-function(e){
+reader.onload = function(e){
 
-const saveData =
-JSON.parse(
-e.target.result
-);
+const saveData = JSON.parse(e.target.result);
 
 document
 .querySelectorAll("[data-save]")
 .forEach((field,index)=>{
-
-field.value =
-saveData[index] || "";
-
+field.value = saveData[index] || "";
 });
 
 autoSave();
-
-alert(
-"✅ Je eerdere werk is geopend."
-);
+alert("✅ Je eerdere werk is geopend.");
 
 };
 
@@ -708,18 +702,10 @@ Je verwijdert alle antwoorden die je hebt ingevuld.
 Maak eerst een kopie als je je werk wilt bewaren.`
 );
 
-if(!confirmed){
-return;
-}
+if(!confirmed) return;
 
-localStorage.removeItem(
-"afstudeerreis_canvas"
-);
-
-alert(
-"✨ Klaar! Je start weer met een leeg canvas."
-);
-
+localStorage.removeItem("afstudeerreis_canvas");
+alert("✨ Klaar! Je start weer met een leeg canvas.");
 location.reload();
 
 }
@@ -745,19 +731,11 @@ function updateThemeButton(){
 const btn =
 document.getElementById("themeToggle");
 
-if(
-document.body.classList.contains("dark")
-){
-
-btn.innerHTML =
-"☀️ Lichte modus";
-
+if(document.body.classList.contains("dark")){
+btn.innerHTML = "☀️ Lichte modus";
 }
 else{
-
-btn.innerHTML =
-"🌙 Donkere modus";
-
+btn.innerHTML = "🌙 Donkere modus";
 }
 
 }
@@ -765,26 +743,17 @@ btn.innerHTML =
 function loadTheme(){
 
 const saved =
-localStorage.getItem(
-"canvas_theme"
-);
+localStorage.getItem("canvas_theme");
 
 if(saved==="dark"){
-
-document.body
-.classList
-.add("dark");
-
+document.body.classList.add("dark");
 }
 
 updateThemeButton();
 
 }
 
-document.addEventListener(
-"input",
-autoSave
-);
+document.addEventListener("input", autoSave);
 
 autoLoad();
 loadTheme();
