@@ -1,0 +1,795 @@
+<!DOCTYPE html>
+<html lang="nl">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Van Probleem naar Impact Canvas</title>
+
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+
+<style>
+
+:root{
+
+    --bg-gradient:
+    linear-gradient(
+        135deg,
+        #6C63FF,
+        #8648FF,
+        #32CFFF
+    );
+
+    --card-bg:rgba(255,255,255,.15);
+
+    --field-bg:white;
+
+    --field-text:#333;
+
+    --main-text:white;
+
+    --details-bg:white;
+
+    --details-text:#333;
+
+    --reflection-bg:#FFF6CC;
+
+    --reflection-text:#333;
+
+    --status-bg:#22c55e;
+
+    --accent:#6C63FF;
+
+    --danger:#ff4d6d;
+}
+
+body.dark{
+
+    --bg-gradient:
+    linear-gradient(
+        135deg,
+        #0f172a,
+        #1e293b,
+        #111827
+    );
+
+    --card-bg:rgba(30,41,59,.90);
+
+    --field-bg:#111827;
+
+    --field-text:#f1f5f9;
+
+    --main-text:#f8fafc;
+
+    --details-bg:#1f2937;
+
+    --details-text:#f8fafc;
+
+    --reflection-bg:#2d2c16;
+
+    --reflection-text:#fff7ae;
+
+    --status-bg:#0284c7;
+
+}
+
+*{
+    margin:0;
+    padding:0;
+    box-sizing:border-box;
+}
+
+html{
+    color-scheme:light dark;
+}
+
+body{
+    font-family:'Inter',sans-serif;
+    background:var(--bg-gradient);
+    color:var(--main-text);
+    min-height:100vh;
+    padding:30px;
+}
+
+.container{
+    max-width:1400px;
+    margin:auto;
+}
+
+.header{
+    text-align:center;
+    margin-bottom:30px;
+}
+
+.header h1{
+    font-size:clamp(2rem,5vw,3.5rem);
+    margin-bottom:10px;
+}
+
+.header p{
+    max-width:900px;
+    margin:auto;
+    line-height:1.7;
+}
+
+#saveStatus{
+    background:var(--status-bg);
+    padding:12px;
+    border-radius:14px;
+    margin-bottom:20px;
+    text-align:center;
+    font-weight:700;
+}
+
+.actions{
+    text-align:center;
+    margin-bottom:15px;
+}
+
+.btn{
+    border:none;
+    padding:12px 18px;
+    border-radius:14px;
+    margin:5px;
+    cursor:pointer;
+    font-weight:700;
+    background:white;
+    color:var(--accent);
+}
+
+.btn:hover{
+    transform:translateY(-2px);
+}
+
+.delete{
+    background:var(--danger);
+    color:white;
+}
+
+.helper-text{
+    text-align:center;
+    opacity:.95;
+    margin-bottom:25px;
+    line-height:1.6;
+}
+
+.card{
+    background:var(--card-bg);
+    backdrop-filter:blur(16px);
+    border-radius:24px;
+    padding:25px;
+    margin-bottom:25px;
+    border:1px solid rgba(255,255,255,.15);
+}
+
+.section-title{
+    font-size:1.5rem;
+    font-weight:800;
+    margin-bottom:20px;
+}
+
+.grid{
+    display:grid;
+    grid-template-columns:repeat(auto-fit,minmax(280px,1fr));
+    gap:20px;
+}
+
+.field{
+    background:var(--field-bg);
+    color:var(--field-text);
+    border-radius:18px;
+    padding:18px;
+}
+
+label{
+    display:block;
+    margin-bottom:10px;
+    font-weight:700;
+    color:var(--accent);
+}
+
+textarea,
+select{
+
+    width:100%;
+
+    padding:12px;
+
+    border-radius:12px;
+
+    border:1px solid rgba(0,0,0,.1);
+
+    background:var(--field-bg);
+
+    color:var(--field-text);
+
+    font-family:inherit;
+}
+
+textarea{
+    min-height:120px;
+    resize:vertical;
+}
+
+.milestone{
+    background:var(--card-bg);
+    border-radius:24px;
+    padding:25px;
+    margin-bottom:25px;
+}
+
+.milestone h3{
+    margin-bottom:20px;
+}
+
+details{
+    background:var(--details-bg);
+    color:var(--details-text);
+    border-radius:14px;
+    padding:15px;
+    margin-top:15px;
+}
+
+summary{
+    cursor:pointer;
+    font-weight:700;
+}
+
+details h4{
+    margin-top:15px;
+    color:var(--accent);
+}
+
+details ul{
+    margin-left:20px;
+    margin-top:10px;
+}
+
+.reflection{
+    margin-top:15px;
+    background:var(--reflection-bg);
+    color:var(--reflection-text);
+    padding:15px;
+    border-radius:14px;
+    line-height:1.7;
+}
+
+footer{
+    text-align:center;
+    margin-top:40px;
+    opacity:.9;
+}
+
+@media(max-width:768px){
+
+    body{
+        padding:15px;
+    }
+
+}
+
+@media print{
+
+    body{
+        background:white;
+        color:black;
+    }
+
+    .btn,
+    #saveStatus{
+        display:none;
+    }
+
+    details{
+        display:none;
+    }
+
+}
+
+</style>
+</head>
+
+<body>
+
+<div class="container">
+
+<div id="saveStatus">
+✅ Je werk wordt automatisch bewaard
+</div>
+
+<div class="header">
+
+<h1>🚀 Van Probleem naar Impact Canvas</h1>
+
+<p>
+Breng jouw afstudeeronderzoek in beeld als een veranderverhaal.
+Denk na over het probleem, de betrokken mensen en de verandering die jouw onderzoek mogelijk maakt.
+</p>
+
+</div>
+
+<div class="actions">
+
+<button class="btn" onclick="exportJSON()">
+💾 Bewaar een kopie
+</button>
+
+<button class="btn" onclick="document.getElementById('importFile').click()">
+📂 Open eerder opgeslagen werk
+</button>
+
+<button class="btn" onclick="window.print()">
+📄 Download als PDF
+</button>
+
+<button class="btn" id="themeToggle" onclick="toggleTheme()">
+🌙 Donkere modus
+</button>
+
+<button class="btn delete" onclick="resetCanvas()">
+🗑️ Opnieuw beginnen
+</button>
+
+<input
+type="file"
+id="importFile"
+accept=".json"
+style="display:none"
+onchange="importJSON(event)">
+
+</div>
+
+<p class="helper-text">
+✅ Je werk wordt automatisch bewaard op dit apparaat.<br>
+💾 Kies <strong>Bewaar een kopie</strong> als je verder wilt werken op een andere computer.
+</p>
+
+<div class="card">
+
+<div class="section-title">
+🚨 Mijn onderzoek
+</div>
+
+<div class="grid">
+
+<div class="field">
+<label>Wat is het probleem of de kans?</label>
+<textarea data-save></textarea>
+</div>
+
+<div class="field">
+<label>🎭 Mijn professionele rol</label>
+
+<select data-save>
+<option>Onderzoeker</option>
+<option>Adviseur</option>
+<option>Ontwerper</option>
+<option>Verbinder</option>
+<option>Projectleider</option>
+<option>Veranderaar</option>
+</select>
+</div>
+
+<div class="field">
+<label>🚀 Gewenste impact</label>
+<textarea data-save></textarea>
+</div>
+
+<div class="field">
+<label>🌍 Toekomstbeeld</label>
+<textarea data-save></textarea>
+</div>
+
+</div>
+
+</div>
+
+<div id="milestones"></div>
+
+<footer>
+Van probleem ➜ inzicht ➜ onderzoek ➜ verandering ✨
+</footer>
+
+</div>
+
+<script>
+
+const milestones = [
+
+{
+title:"🔍 Probleemverkenning",
+reflection:"Wat gebeurt er als niemand dit probleem oplost?",
+examples:`
+<h4>📝 Wat gebeurt er?</h4>
+<ul>
+<li>Werkprocessen observeren</li>
+<li>Knelpunten inventariseren</li>
+<li>Bestaande documenten bekijken</li>
+</ul>
+
+<h4>👥 Wie betrek je?</h4>
+<ul>
+<li>Professionals</li>
+<li>Cliënten</li>
+<li>Leidinggevenden</li>
+</ul>
+`,
+sample:"Verpleegkundigen registreren informatie in meerdere systemen waardoor tijd verloren gaat."
+},
+
+{
+title:"🎯 Onderzoeksvraag formuleren",
+reflection:"Welke vraag moet je beantwoorden om verbetering mogelijk te maken?",
+examples:`
+<ul>
+<li>Probleem afbakenen</li>
+<li>Onderzoeksdoel bepalen</li>
+<li>Literatuur verkennen</li>
+</ul>
+`,
+sample:"Hoe kunnen administratieve lasten voor verpleegkundigen worden verminderd?"
+},
+
+{
+title:"👥 Stakeholders verkennen",
+reflection:"Wie heeft de meeste invloed op het succes van jouw onderzoek?",
+examples:`
+<ul>
+<li>Eindgebruikers</li>
+<li>Management</li>
+<li>Experts</li>
+<li>Ondersteunende diensten</li>
+</ul>
+`,
+sample:"De teamleider beslist over invoering, verpleegkundigen gebruiken de oplossing."
+},
+
+{
+title:"📊 Data verzamelen",
+reflection:"Welke informatie zou jouw huidige aannames kunnen tegenspreken?",
+examples:`
+<ul>
+<li>Interviews</li>
+<li>Observaties</li>
+<li>Enquêtes</li>
+<li>Documentanalyse</li>
+</ul>
+`,
+sample:"Interviews tonen aan dat dubbele registratie gemiddeld 25 minuten kost."
+},
+
+{
+title:"🧠 Analyse en inzichten",
+reflection:"Welk inzicht heeft jou het meest verrast?",
+examples:`
+<ul>
+<li>Patronen herkennen</li>
+<li>Oorzaken onderzoeken</li>
+<li>Conclusies trekken</li>
+</ul>
+`,
+sample:"Het probleem zit vooral in werkafspraken en minder in de software."
+},
+
+{
+title:"💡 Advies of oplossing ontwikkelen",
+reflection:"Welk onderdeel van jouw advies heeft de grootste impact?",
+examples:`
+<ul>
+<li>Verbeterplan maken</li>
+<li>Prototype ontwikkelen</li>
+<li>Feedback ophalen</li>
+</ul>
+`,
+sample:"Een gestandaardiseerd intakeformulier voorkomt dubbele registratie."
+},
+
+{
+title:"🚀 Afronding en impact",
+reflection:"Hoe ziet een werkdag eruit nadat jouw aanbevelingen zijn ingevoerd?",
+examples:`
+<ul>
+<li>Implementatie beschrijven</li>
+<li>Resultaten presenteren</li>
+<li>Borging uitwerken</li>
+</ul>
+`,
+sample:"Professionals registreren nog maar één keer en besparen dagelijks tijd."
+}
+
+];
+
+const container = document.getElementById("milestones");
+
+milestones.forEach(m=>{
+
+container.innerHTML += `
+
+<div class="milestone">
+
+<h3>${m.title}</h3>
+
+<div class="grid">
+
+<div class="field">
+<label>📝 Wat gebeurt er in deze fase?</label>
+<textarea data-save></textarea>
+</div>
+
+<div class="field">
+<label>👥 Wie moet je spreken, betrekken of informeren?</label>
+<textarea data-save></textarea>
+</div>
+
+<div class="field">
+<label>💬 Waarover ga je met hen in gesprek?</label>
+<textarea data-save></textarea>
+</div>
+
+<div class="field">
+<label>✅ Wat levert deze fase op?</label>
+<textarea data-save></textarea>
+</div>
+
+</div>
+
+<details>
+<summary>💡 Inspiratie en voorbeelden</summary>
+${m.examples}
+</details>
+
+<details>
+<summary>🌟 Uitgewerkt voorbeeld</summary>
+<p>${m.sample}</p>
+</details>
+
+<div class="reflection">
+<strong>🧠 Reflectievraag</strong><br>
+${m.reflection}
+</div>
+
+</div>
+
+`;
+
+});
+
+let statusTimer;
+
+function autoSave(){
+
+const saveData = {};
+
+document
+.querySelectorAll("[data-save]")
+.forEach((field,index)=>{
+
+saveData[index]=field.value;
+
+});
+
+localStorage.setItem(
+"afstudeerreis_canvas",
+JSON.stringify(saveData)
+);
+
+const status =
+document.getElementById("saveStatus");
+
+status.innerHTML =
+"💾 Je laatste wijzigingen zijn bewaard";
+
+clearTimeout(statusTimer);
+
+statusTimer = setTimeout(()=>{
+
+status.innerHTML =
+"✅ Je werk wordt automatisch bewaard";
+
+},1500);
+
+}
+
+function autoLoad(){
+
+const stored =
+localStorage.getItem(
+"afstudeerreis_canvas"
+);
+
+if(!stored) return;
+
+const saveData =
+JSON.parse(stored);
+
+document
+.querySelectorAll("[data-save]")
+.forEach((field,index)=>{
+
+if(saveData[index] !== undefined){
+
+field.value =
+saveData[index];
+
+}
+
+});
+
+}
+
+function exportJSON(){
+
+const saveData={};
+
+document
+.querySelectorAll("[data-save]")
+.forEach((field,index)=>{
+
+saveData[index]=field.value;
+
+});
+
+const blob = new Blob(
+[
+JSON.stringify(saveData,null,2)
+],
+{
+type:"application/json"
+}
+);
+
+const a =
+document.createElement("a");
+
+a.href =
+URL.createObjectURL(blob);
+
+a.download =
+"mijn-afstudeeronderzoek.json";
+
+a.click();
+
+setTimeout(()=>{
+
+alert(
+"✅ Je hebt een kopie van je werk opgeslagen.\n\nGebruik dit bestand als je later op een andere computer verder wilt werken."
+);
+
+},200);
+
+}
+
+function importJSON(event){
+
+const file =
+event.target.files[0];
+
+if(!file) return;
+
+const reader =
+new FileReader();
+
+reader.onload =
+function(e){
+
+const saveData =
+JSON.parse(
+e.target.result
+);
+
+document
+.querySelectorAll("[data-save]")
+.forEach((field,index)=>{
+
+field.value =
+saveData[index] || "";
+
+});
+
+autoSave();
+
+alert(
+"✅ Je eerdere werk is geopend."
+);
+
+};
+
+reader.readAsText(file);
+
+}
+
+function resetCanvas(){
+
+const confirmed =
+confirm(
+`Opnieuw beginnen?
+
+Je verwijdert alle antwoorden die je hebt ingevuld.
+
+Maak eerst een kopie als je je werk wilt bewaren.`
+);
+
+if(!confirmed){
+return;
+}
+
+localStorage.removeItem(
+"afstudeerreis_canvas"
+);
+
+alert(
+"✨ Klaar! Je start weer met een leeg canvas."
+);
+
+location.reload();
+
+}
+
+function toggleTheme(){
+
+document.body.classList.toggle("dark");
+
+const darkMode =
+document.body.classList.contains("dark");
+
+localStorage.setItem(
+"canvas_theme",
+darkMode ? "dark" : "light"
+);
+
+updateThemeButton();
+
+}
+
+function updateThemeButton(){
+
+const btn =
+document.getElementById("themeToggle");
+
+if(
+document.body.classList.contains("dark")
+){
+
+btn.innerHTML =
+"☀️ Lichte modus";
+
+}
+else{
+
+btn.innerHTML =
+"🌙 Donkere modus";
+
+}
+
+}
+
+function loadTheme(){
+
+const saved =
+localStorage.getItem(
+"canvas_theme"
+);
+
+if(saved==="dark"){
+
+document.body
+.classList
+.add("dark");
+
+}
+
+updateThemeButton();
+
+}
+
+document.addEventListener(
+"input",
+autoSave
+);
+
+autoLoad();
+loadTheme();
+
+</script>
+
+</body>
+</html>
